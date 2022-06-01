@@ -15,13 +15,14 @@ const SignUp = () => {
             <div className="max-w-[320px] mx-auto py-16">
               <h1 className="text-3xl font-bold">Sign Up</h1>
               <form>
-                <input type="email" className="" autoComplete="email" />
+                <input type="email" className="" placeholder="email" autoComplete="email" />
                 <input
                   type="password"
                   className=""
                   placeholder="Password"
                   autoComplete="current-password"
                 />
+                <button className="bg-red-600 py-3 my-6 rounded font-bold ">Sign Up</button>
               </form>
             </div>
           </div>
