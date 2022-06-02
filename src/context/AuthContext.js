@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from '../Firebase'
+import { auth, db } from '../Firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth'
+import { setDoc,doc } from 'firebase/firestore'
 
 const AuthContext = createContext()
 
@@ -11,10 +12,13 @@ export function AuthContextProvider({ children }) {
 
 
     function signUp(email, password) {
-        return createUserWithEmailAndPassword(auth,email,password)
+        createUserWithEmailAndPassword(auth, email, password)
+        setDoc(doc(db, 'users', email), {
+            savedShows: []
+        })
     }
 
-    function logIn(email,password) {
+    function logIn(email, password) {
         return signInWithEmailAndPassword(auth, email, password)
     }
 
@@ -23,7 +27,7 @@ export function AuthContextProvider({ children }) {
     }
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser)=> {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
         })
         return () => {
@@ -34,7 +38,7 @@ export function AuthContextProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{signUp, user}}>
+        <AuthContext.Provider value={{ signUp, logIn, logOut, user }}>
             {children}
         </AuthContext.Provider>
     )
