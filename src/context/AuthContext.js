@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from '../Firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { setDoc, doc } from 'firebase/firestore'
+import { setDoc, doc, getDoc } from 'firebase/firestore'
+import { async } from "@firebase/util";
 
 
 const AuthContext = createContext()
@@ -9,19 +10,63 @@ const AuthContext = createContext()
 
 export function AuthContextProvider({ children }) {
 
-    const googleSignIn = () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-    }
-
     const [user, setUser] = useState({})
 
+    // const googleSignIn = () => {
+    //     const provider = new GoogleAuthProvider();
+    //     signInWithPopup(auth, provider)  
+    // }
 
-    function signUp(email, password) {
-        createUserWithEmailAndPassword(auth, email, password)
-        setDoc(doc(db, 'users', email), {
-            savedShows: []
-        })
+    // function googleSignIn() {
+    //     const provider = new GoogleAuthProvider();
+    //     signInWithPopup(auth, provider)
+    //     setDoc(doc(db, 'users', auth.currentUser.email), {
+    //         savedShows: []
+    //     })
+    // }
+
+    // function googleSignIn() {
+    //     const provider = new GoogleAuthProvider();
+    //     signInWithPopup(auth, provider)
+    //         .then((result) => {
+    //             // This gives you a Google Access Token. You can use it to access the Google API.
+    //             const credential = GoogleAuthProvider.credentialFromResult(result);
+    //             const token = credential.accessToken;
+    //             // The signed-in user info.
+    //             const user = result.user;
+    //             setDoc(doc(db, 'users', user.email), {
+    //                 savedShows: []
+    //             })
+    //             // ...
+    //         }).catch((error) => {
+    //             // Handle Errors here.
+    //             const errorCode = error.code;
+    //             const errorMessage = error.message;
+    //             // The email of the user's account used.
+    //             const email = error.customData.email;
+    //             // The AuthCredential type that was used.
+    //             const credential = GoogleAuthProvider.credentialFromError(error);
+    //             // ...
+    //         });
+    // }
+
+
+    const signUp = async (email, password) => {
+        createUserWithEmailAndPassword(auth, email, password);
+        const docRef = doc(db, 'users', email);
+        const docSnap = await getDoc(docRef);
+
+
+        if (docSnap.exists()) {
+            console.log("Document exist!");
+            // Throws an error.
+            throw new Error('Document Exist!');
+        } else {
+            await setDoc(docRef, {
+                savedShows: []
+            });
+        }
+
     }
 
     function logIn(email, password) {
@@ -35,11 +80,13 @@ export function AuthContextProvider({ children }) {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
+            console.log("user", currentUser)
+
         })
         return () => {
             unsubscribe()
         }
-    })
+    }, [])
 
 
 
