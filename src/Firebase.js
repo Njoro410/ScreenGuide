@@ -9,12 +9,12 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDXOijp_OrGVo55xh6YXG2t_93xVANJi7I",
-  authDomain: "netflix-guide-2c8cc.firebaseapp.com",
-  projectId: "netflix-guide-2c8cc",
-  storageBucket: "netflix-guide-2c8cc.appspot.com",
-  messagingSenderId: "117581114055",
-  appId: "1:117581114055:web:dec68cb6cbc9623c156ce2"
+  apiKey: "AIzaSyClZf3hJyf96FWA3H330pauaCXHa7nsvb0",
+  authDomain: "movie-guide-ca6d1.firebaseapp.com",
+  projectId: "movie-guide-ca6d1",
+  storageBucket: "movie-guide-ca6d1.appspot.com",
+  messagingSenderId: "226030852085",
+  appId: "1:226030852085:web:41adb8e6b6a95d2c81b2bc"
 };
 
 
