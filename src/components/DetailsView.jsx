@@ -17,14 +17,14 @@ const DetailsView = () => {
       });
   }, []);
 
-//  const timeConvert = (n) => {
-//   var num = n;
-//   var hours = (num / 60);
-//   var rhours = Math.floor(hours);
-//   var minutes = (hours - rhours) * 60;
-//   var rminutes = Math.round(minutes);
-//   return rhours + " h : " + rminutes + " m";
-//  }
+ const timeConvert = (n) => {
+  var num = n;
+  var hours = (num / 60);
+  var rhours = Math.floor(hours);
+  var minutes = (hours - rhours) * 60;
+  var rminutes = Math.round(minutes);
+  return rhours + " h : " + rminutes + " m";
+ }
   return (
     <div className="w-full h-[650px] text-white">
       <div className="w-full h-full">
