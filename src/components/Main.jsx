@@ -9,7 +9,7 @@ const Main = () => {
   const movie = movies[Math.floor(Math.random() * movies.length)];
 
   useEffect(() => {
-    axios.get(requests.requestPopular).then((response) => {
+    axios.get(requests.requestTrending).then((response) => {
       setMovies(response.data.results);
     });
   }, []);
