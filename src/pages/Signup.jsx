@@ -1,22 +1,38 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import { GoogleButton } from "react-google-button";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {user, signUp} = UserAuth();
-  const navigate = useNavigate()
+  const { user, signUp, googleSignIn } = UserAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await signUp(email, password);
-      navigate('/')
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handlegoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user != null) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <>
@@ -52,6 +68,7 @@ const SignUp = () => {
                 <button className="bg-red-600 py-3 my-6 rounded font-bold ">
                   Sign Up
                 </button>
+                <GoogleButton onClick={handlegoogleSignIn} />
                 <div className="flex justify-between items-center text-sm text-gray-600">
                   <p>
                     <input className="mr-2" type="checkbox" />
