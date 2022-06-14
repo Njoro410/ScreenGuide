@@ -38,7 +38,7 @@ const SavedMovies = () => {
 
   return (
     <>
-      <h2 className="text-white font-bold md:text-xl p-4 ">My Movies</h2>
+      <h2 className="text-white font-bold md:text-xl p-4 ">My Movies {user?.displayName}</h2>
       <div className="relative flex items-center group">
         <MdChevronLeft
           onClick={slideLeft}
@@ -49,9 +49,9 @@ const SavedMovies = () => {
           id={"slider"}
           className="w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide relative"
         >
-          {movies.map((item, id) => (
+          {movies?.map((item, id) => (
             <div
-              key={item?.id}
+              key={id}
               className="w-[160px] sm:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2"
             >
               <img
