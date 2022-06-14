@@ -24,9 +24,14 @@ const DetailsView = () => {
     var rminutes = Math.round(minutes);
     return rhours + " h : " + rminutes + " m";
   };
-  
+
+  const percent = (vote) => {
+    var p = (vote * 100) / 10;
+    return Math.floor(p);
+  };
+
   return (
-    <div className="w-full h-[650px] text-white">
+    <div className="md:w-full h-[580px] text-white">
       <div className="w-full h-full">
         <div className="bg-black/90 fixed top-0 left-0 w-full h-screen"></div>
         <img
@@ -36,16 +41,16 @@ const DetailsView = () => {
         />
         <div className="absolute w-full top-[10%] p-4 md:p-8">
           <div className="grid md:grid-cols-3  gap-0 ">
-            <div className="md:col-span-1 ">
+            <div className="flex justify-center md:col-span-1">
               <img
-                className="h-[80%] rounded"
+                className="h-[70%] rounded"
                 src={`https://image.tmdb.org/t/p/w500/${details?.poster_path}`}
                 alt={details?.poster_path}
               />
             </div>
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 ">
               <a href={details?.homepage}>
-                <p className="text-3xl text-red-400 md:text-5xl font-bold mt-5">
+                <p className="text-3xl text-red-400 md:text-5xl font-bold mt-12">
                   {details?.title}({details?.release_date?.substring(0, 4)})
                 </p>
               </a>
@@ -63,29 +68,29 @@ const DetailsView = () => {
                 </p>
               </div>
               <div className="mt-5">
-                <p>
-                  {details.production_countries?.map((item, index) => (
-                    <div key={index}>
-                      <p className="text-gray-400 text-lg">
-                        {details?.status}•{details?.release_date}•(
-                        {item.name})
-                      </p>
-                    </div>
-                  ))}
-                </p>
+                {details.production_countries?.map((item, index) => (
+                  <div key={index}>
+                    <p className="text-gray-400 text-lg">
+                      {details?.status}•{details?.release_date}•(
+                      {item.name})
+                    </p>
+                  </div>
+                ))}
               </div>
               <div>
                 <p className="text-3xl  font-bold my-2 ">Overview</p>
                 <p className="">{details?.overview}</p>
               </div>
+              <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center">
+                <p>{percent(details?.vote_average)}%-Like this</p>
+              </div>
             </div>
           </div>
         </div>
-        {details?.id && <Cast id={details?.id}/>}
+        <hr className="my-5" />
+        {details?.id && <Cast id={details?.id} />}
       </div>
-      
     </div>
-    
   );
 };
 
