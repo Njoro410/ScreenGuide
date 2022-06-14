@@ -19,9 +19,10 @@ const Navbar = () => {
     <div className="flex items-center justify-between p-4 z-[100] w-full absolute ">
       <Link to={"/"}>
         <h1 className="text-red-600 text-4xl font-bold cursor-pointer">
-          NETFLIX
+          NETFLIX GUIDE
         </h1>
       </Link>
+
       {user?.email ? (
         <div>
           <Link to={"/account"}>
@@ -37,6 +38,9 @@ const Navbar = () => {
         </div>
       ) : (
         <div>
+          <Link to={"/series"}>
+            <button className="text-white pr-4">TV Shows</button>
+          </Link>
           <Link to={"/login"}>
             <button className="text-white pr-4">Sign In</button>
           </Link>
