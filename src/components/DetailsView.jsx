@@ -2,10 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Cast from "./Cast";
+import Modal from "./Modal";
+import { FaHeart, FaRegHeart, FaEye, FaCheck } from "react-icons/fa";
+import ReactTooltip from "react-tooltip";
 
 const DetailsView = () => {
   const { id } = useParams();
   const [details, setDetails] = useState({});
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -81,8 +85,49 @@ const DetailsView = () => {
                 <p className="text-3xl  font-bold my-2 ">Overview</p>
                 <p className="">{details?.overview}</p>
               </div>
-              <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center">
-                <p>{percent(details?.vote_average)}%-Like this</p>
+              <div className="flex gap-5">
+                <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center">
+                  <p>{percent(details?.vote_average)}%-Like this</p>
+                </div>
+                <div className="mt-5 ">
+                  <button
+                    className="font-bold bg-slate-900 p-3 rounded-full w-32 text-center hover:bg-slate-700"
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                    type="button"
+                  >
+                    Watch Trailer
+                  </button>
+                  {open && (
+                    <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center">
+                      {details?.id && (
+                        <Modal
+                          name={details?.title}
+                          id={details?.id}
+                          closeModal={setOpen}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div data-tip="Favourite" className="mt-5">
+                  <ReactTooltip type="info" effect="float" />
+                  <button
+                    className="font-bold bg-slate-900 p-4 rounded-full w-32 flex justify-center  hover:bg-slate-700"
+                    type="button"
+                  >
+                    <FaHeart />
+                  </button>
+                </div>
+                <div data-tip="Watched" className="mt-5">
+                  <button
+                    className="font-bold bg-slate-900 p-4 rounded-full w-32 flex justify-center  hover:bg-slate-700"
+                    type="button"
+                  >
+                    <FaCheck />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
