@@ -6,6 +6,8 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
+
+
 const Movie = ({ item }) => {
   const [like, setLike] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -24,31 +26,30 @@ const Movie = ({ item }) => {
           img: item.backdrop_path,
         }),
       });
+      await Toast.fire({
+        icon: "success",
+        title: item?.title || item?.original_name,
+      });
     } else {
       Swal.fire({
         title: "Error!",
         text: "Log in to save a movie",
         icon: "error",
       });
-      // await Toast.fire({
-      //   icon: 'success',
-      //   title: item?.title || item?.original_name
-      // })
     }
   };
 
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top-right',
-    iconColor: 'green',
+    position: "top-right",
+    iconColor: "green",
     customClass: {
-      popup: 'colored-toast'
+      popup: "colored-toast",
     },
     showConfirmButton: false,
     timer: 1500,
-    timerProgressBar: true
-  })
-
+    timerProgressBar: true,
+  });
 
   return (
     <div className="w-[160px] sm:w-[240px] lg:w-[280px] inline-block cursor-pointer relative p-2">
