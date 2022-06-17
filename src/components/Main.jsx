@@ -5,14 +5,13 @@ import { Link } from "react-router-dom";
 import Modal from "./Modal";
 
 const Main = () => {
-  const [movies, setMovies] = useState([]);
+  const [movie, setMovies] = useState({});
   const [open, setOpen] = useState(false);
 
-  const movie = movies[Math.floor(Math.random() * movies.length)];
 
   useEffect(() => {
     axios.get(requests.requestTrending).then((response) => {
-      setMovies(response.data.results);
+      setMovies(response.data.results[Math.floor(Math.random() * (response.data.results).length)]);
     });
   }, []);
   // console.log(movie);
