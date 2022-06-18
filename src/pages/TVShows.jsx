@@ -2,6 +2,7 @@ import React from "react";
 import Series from "../components/Series";
 import requests from "../Requests";
 import Row from '../components/Row'
+import FooterBottom from "../components/FooterBottom";
 
 const TVShows = () => {
   return (
@@ -13,6 +14,7 @@ const TVShows = () => {
       <Row rowID='4' title='Top Rated' fetchURL = {requests.requestTopRatedShows}/>
       <Row rowID='5' title='Horror' fetchURL = {requests.requestHorrorShows}/>
       {/* <Row rowID='6' title='Airing Today' fetchURL = {requests.requestAiringToday}/> */}
+      <FooterBottom/>
     </>
   );
 };
