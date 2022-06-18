@@ -3,6 +3,8 @@ import { MdChevronLeft, MdChevronRight, MdDeleteForever } from "react-icons/md";
 import { UserAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { updateDoc, doc, onSnapshot } from "firebase/firestore";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SavedMovies = () => {
   const { user } = UserAuth();
@@ -25,20 +27,38 @@ const SavedMovies = () => {
   }, [user?.email]);
 
   const movieRef = doc(db, "users", `${user?.email}`);
+  
   const deleteMovie = async (passedID) => {
     try {
         const final = movies.filter((item)=> item.id !== passedID)
         await updateDoc(movieRef, {
             savedShows: final,
         });
+        await Toast.fire({
+          icon: "error",
+          title: "Deleted",
+          // text: "Deleted"
+        });
     } catch (err) {
       console.log(err);
     }
   };
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-right",
+    iconColor: "red",
+    customClass: {
+      popup: "colored-toast",
+    },
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+  });
+
   return (
     <>
-      <h2 className="text-white font-bold md:text-xl p-4 ">My Movies {user?.displayName}</h2>
+      <h2 className="text-white font-bold md:text-xl p-4 ">Favourites</h2>
       <div className="relative flex items-center group">
         <MdChevronLeft
           onClick={slideLeft}
@@ -60,9 +80,11 @@ const SavedMovies = () => {
                 alt={item?.title}
               />
               <div className="absolute top-0 left-0 w-full h-full hover:bg-black/80 opacity-0 hover:opacity-100 text-white">
+              <Link to={`/details/${item?.id} `}>
                 <p className="whitespace-normal text-xs md:text-sm font-bold flex justify-center items-center h-full text-center">
                   {item?.title}
                 </p>
+                </Link>
                 <p
                   onClick={() => {
                     deleteMovie(item.id);
