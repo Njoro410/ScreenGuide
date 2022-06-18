@@ -1,13 +1,86 @@
 import axios from "axios";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { UserAuth } from "../context/AuthContext";
 import SeriesCast from "./SeriesCast";
 import SeriesModal from "./SeriesModal";
+import Swal from "sweetalert2";
+import { db } from "../Firebase";
+import { FaCheck, FaHeart } from "react-icons/fa";
+import ReactTooltip from "react-tooltip";
 
 const SeriesDetails = () => {
   const { id } = useParams();
   const [details, setDetails] = useState({});
   const [open, setOpen] = useState(false);
+  const { user } = UserAuth();
+  const [like, setLike] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const movieID = doc(db, "users", `${user?.email}`);
+
+  const saveMovie = async () => {
+    if (user?.email) {
+      setLike(!like);
+      setSaved(true);
+      await updateDoc(movieID, {
+        savedShows: arrayUnion({
+          id: details.id,
+          title: details.original_name,
+          img: details.backdrop_path,
+        }),
+      });
+      await Toast.fire({
+        icon: "success",
+        title: details?.original_name,
+        text: "Marked as favourite",
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Log in to save a movie",
+        icon: "error",
+      });
+    }
+  };
+
+  const watchedMovie = async () => {
+    if (user?.email) {
+      setLike(!like);
+      setSaved(true);
+      await updateDoc(movieID, {
+        watchedShows: arrayUnion({
+          id: details.id,
+          title: details.original_name,
+          img: details.backdrop_path,
+        }),
+      });
+      await Toast.fire({
+        icon: "success",
+        title: details?.original_name,
+        text: "set as watched",
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Log in to save a movie",
+        icon: "error",
+      });
+    }
+  };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-right",
+    iconColor: "green",
+    customClass: {
+      popup: "colored-toast",
+    },
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+  });
 
   useEffect(() => {
     axios
@@ -52,21 +125,28 @@ const SeriesDetails = () => {
             </div>
             <div className="md:col-span-2">
               <a href={details?.homepage}>
-                <p className="text-3xl text-red-400 md:text-5xl font-bold mt-12">
+                <p className="text-3xl text-green-400 md:text-5xl font-bold mt-12">
                   {details?.original_name}(
-                  {details?.first_air_date?.substring(0, 4)})
+                  {details?.first_air_date?.substring(0, 4)}){" "}
+                  {details.created_by ? (
+                    <span className="text-sm text-gray-400 font-thin italic">
+                      by {details?.created_by?.map((item) => item?.name)}
+                    </span>
+                  ) : (
+                    "unknown"
+                  )}
                 </p>
               </a>
               <p className="text-gray-400 text-lg italic">{details?.tagline}</p>
               <div className="flex flex-row gap-2">
                 {details.genres?.map((item, index) => (
                   <div key={index}>
-                    <p className="bg-gray-600 px-2 py-0.5 rounded">
+                    <p className="bg-green-900 px-2 py-0.5 rounded">
                       {item.name}
                     </p>
                   </div>
                 ))}{" "}
-                <p className="bg-gray-600 px-2 py-0.5 rounded">
+                <p className="bg-green-900 px-2 py-0.5 rounded">
                   {timeConvert(details?.episode_run_time)}
                 </p>
               </div>
@@ -81,18 +161,35 @@ const SeriesDetails = () => {
                   {/* ))} */}
                 </p>
               </div>
+              <p className="text-gray-400"><span className="text-green-400">First aired:</span> {new Date(details?.first_air_date).toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) }</p>
               <div>
-                <p className="text-3xl  font-bold my-2 ">Overview</p>
+                <p className="text-3xl  font-bold my-2 text-green-400">
+                  Overview
+                </p>
                 <p className="">{details?.overview}</p>
               </div>
-              <div className="flex gap-5">
-              <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center">
-                <p>{percent(details?.vote_average)}%-Like this</p>
+              <div>
+                <p className="text-3xl  font-bold my-2 text-green-400">
+                  Networks
+                </p>
+                {details.networks?.map((item, index) => (
+                  <div key={index} className="inline-block">
+                    <img
+                      className="h-8 rounded"
+                      src={`https://image.tmdb.org/t/p/w500/${item.logo_path}`}
+                      alt={details?.poster_path}
+                    />
+                  </div>
+                ))}{" "}
               </div>
-            
+              <div className="flex gap-5">
+                <div className="mt-5 font-bold bg-green-900 p-3 rounded-full w-32 text-center">
+                  <p>{percent(details?.vote_average)}%-Like this</p>
+                </div>
+
                 <div className="mt-5 ">
                   <button
-                    className="font-bold bg-slate-900 p-3 rounded-full w-32 text-center hover:bg-slate-700"
+                    className="font-bold bg-green-900 p-3 rounded-full w-32 text-center hover:bg-green-700"
                     onClick={() => {
                       setOpen(true);
                     }}
@@ -112,11 +209,24 @@ const SeriesDetails = () => {
                     </div>
                   )}
                 </div>
-                <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center hover:bg-slate-700">
-                  <button type="button">Favourite</button>
+                <div className="mt-5" data-tip="Favourite">
+                  <button
+                    className="font-bold bg-green-900 p-4 rounded-full w-32 flex justify-center  hover:bg-green-700"
+                    onClick={saveMovie}
+                    type="button"
+                  >
+                    <FaHeart />
+                  </button>
                 </div>
-                <div className="mt-5 font-bold bg-slate-900 p-3 rounded-full w-32 text-center hover:bg-slate-700">
-                  <button type="button">Watched</button>
+                <div className="mt-5" data-tip="Watched">
+                  <ReactTooltip type="info" effect="float" />
+                  <button
+                    className="font-bold bg-green-900 p-4 rounded-full w-32 flex justify-center  hover:bg-green-700"
+                    onClick={watchedMovie}
+                    type="button"
+                  >
+                    <FaCheck />
+                  </button>
                 </div>
               </div>
             </div>
