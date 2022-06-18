@@ -34,13 +34,17 @@ const SavedMovies = () => {
         await updateDoc(movieRef, {
             savedShows: final,
         });
-        await Toast.fire({
+        Toast.fire({
           icon: "error",
           title: "Deleted",
           // text: "Deleted"
         });
     } catch (err) {
-      console.log(err);
+      Toast.fire({
+        icon: "error",
+        title: "Failed to delete",
+        // text: "Deleted"
+      });
     }
   };
 
