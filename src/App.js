@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import FooterBottom from "./components/FooterBottom";
+import NavbarTop from "./components/NavbarTop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SeriesDetails from "./components/SeriesDetails";
 import { AuthContextProvider } from "./context/AuthContext";
@@ -14,7 +15,7 @@ function App() {
   return (
     <>
       <AuthContextProvider>
-        <Navbar />
+        <NavbarTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -27,6 +28,7 @@ function App() {
             <Account />
           </ProtectedRoute>} />
         </Routes>
+        <FooterBottom/>
       </AuthContextProvider>
     </>
   );
