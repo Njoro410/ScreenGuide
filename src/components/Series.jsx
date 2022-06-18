@@ -2,16 +2,20 @@ import React, { useState, useEffect } from "react";
 import requests from "../Requests";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import SeriesModal from "./SeriesModal";
+import ReactTooltip from "react-tooltip";
 
 const Series = () => {
-  const [series, setSeries] = useState({});
-
-  const show = series[Math.floor(Math.random() * series.length)];
+  const [show, setSeries] = useState({});
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     axios.get(requests.requestTrendingShows).then((response) => {
-      setSeries(response.data.results);
-      console.log(response.data.results);
+      setSeries(
+        response.data.results[
+          Math.floor(Math.random() * response.data.results.length)
+        ]
+      );
     });
   }, []);
   // console.log(show);
@@ -26,6 +30,17 @@ const Series = () => {
 
   return (
     <div className="w-full h-[550px] text-white">
+      {open && (
+        <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full justify-center items-center">
+          {show?.id && (
+            <SeriesModal
+              name={show?.original_name}
+              id={show?.id}
+              closeModal={setOpen}
+            />
+          )}
+        </div>
+      )}
       <div className="w-full h-full">
         <div className="absolute w-full h-[550px] bg-gradient-to-r from-black"></div>
         <img
@@ -34,13 +49,20 @@ const Series = () => {
           alt={show?.original_name}
         />
         <div className="absolute w-full top-[20%] p-4 md:p-8">
-          <h1 className="text-3xl md:text-5xl font-bold">{show?.original_name}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold">
+            {show?.original_name}
+          </h1>
           <div className="my-4">
-            <Link to={"/trailer"}>
-              <button className="border bg-gray-200 text-black border-gray-300 py-2 px-5">
-                Play Trailer
-              </button>
-            </Link>
+            <button
+              onClick={() => {
+                setOpen(true);
+              }}
+              type="button"
+              className="border bg-gray-200 text-black border-gray-300 py-2 px-5"
+            >
+              Play Trailer
+            </button>
+
             <Link to={`/series/${show?.id} `}>
               <button className="border text-white border-gray-300 py-2 px-5 ml-4">
                 See More
@@ -50,6 +72,7 @@ const Series = () => {
           <p className="text-gray-400 text-sm">
             Released: {show?.release_date}
           </p>
+
           <p className="w-full md:max-w-[70%] lg:max-w-[50%] xl:max-w-[35%] text-gray-200">
             {truncateString(show?.overview, 150)}
           </p>
