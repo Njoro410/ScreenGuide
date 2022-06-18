@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import { Avatar, Dropdown } from "flowbite-react";
 
 const NavbarTop = () => {
   const { user, logOut } = UserAuth();
@@ -50,7 +50,7 @@ const NavbarTop = () => {
             arrowIcon={false}
             inline={true}
             label={
-              <Avatar alt="User settings" img={user?.photoURL} rounded={true} />
+              <Avatar alt="User settings"  img={user?.photoURL || `https://www.kindpng.com/picc/m/207-2074624_white-gray-circle-avatar-png-transparent-png.png`} rounded={true} />
             }
           >
             <Dropdown.Header>
