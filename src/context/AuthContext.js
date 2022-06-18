@@ -1,29 +1,55 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from '../Firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithRedirect, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth'
 import { setDoc, doc, getDoc } from 'firebase/firestore'
-import { async } from "@firebase/util";
+import Swal from "sweetalert2";
+
 
 
 const AuthContext = createContext()
+
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-right",
+    iconColor: "red",
+    customClass: {
+      popup: "colored-toast",
+    },
+    showConfirmButton: false,
+    timer: 5000,
+    timerProgressBar: true,
+  });
 
 
 export function AuthContextProvider({ children }) {
 
     const [user, setUser] = useState({})
 
-    // const googleSignIn = () => {
-    //     const provider = new GoogleAuthProvider();
-    //     signInWithPopup(auth, provider)  
-    // }
+    function facebookSignIn() {
+        const provider = new FacebookAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
 
-    // function googleSignIn() {
-    //     const provider = new GoogleAuthProvider();
-    //     signInWithPopup(auth, provider)
-    //     setDoc(doc(db, 'users', auth.currentUser.email), {
-    //         savedShows: []
-    //     })
-    // }
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                const credential = FacebookAuthProvider.credentialFromResult(result);
+                const accessToken = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                setDoc(doc(db, 'users', user.email), {
+                    savedShows: [],
+                    watchedShows: []
+                })
+
+                // ...
+            })
+            .catch((error) => {
+                Toast.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Please try another method"
+                  });
+            });
+    }
 
     function googleSignIn() {
         const provider = new GoogleAuthProvider();
@@ -35,7 +61,8 @@ export function AuthContextProvider({ children }) {
                 // The signed-in user info.
                 const user = result.user;
                 setDoc(doc(db, 'users', user.email), {
-                    savedShows: []
+                    savedShows: [],
+                    watchedShows: []
                 })
                 // ...
             }).catch((error) => {
@@ -58,7 +85,8 @@ export function AuthContextProvider({ children }) {
             throw new Error('Document Exist!');
         } else {
             await setDoc(docRef, {
-                savedShows: []
+                savedShows: [],
+                watchedShows: []
             });
         }
 
@@ -86,7 +114,7 @@ export function AuthContextProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ googleSignIn, signUp, logIn, logOut, user }}>
+        <AuthContext.Provider value={{ facebookSignIn ,googleSignIn, signUp, logIn, logOut, user }}>
             {children}
         </AuthContext.Provider>
     )
