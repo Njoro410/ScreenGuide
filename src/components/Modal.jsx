@@ -42,7 +42,7 @@ const Modal = ({ closeModal, id, name }) => {
               </button>
             </div>
 
-            <div className="p-6 flex gap-5 w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth relative">
+            <div className="p-6 flex gap-5 w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide relative">
               {video &&
                 video?.map((item,i) => {
                   if (
