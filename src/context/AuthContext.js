@@ -66,9 +66,11 @@ export function AuthContextProvider({ children }) {
                 })
                 // ...
             }).catch((error) => {
-                // Handle Errors here.
-                console.log("could not sign in")
-                // ...
+                Toast.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: "Please try another method"
+                  });
             });
     }
 
