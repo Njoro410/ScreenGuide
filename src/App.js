@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import FooterBottom from "./components/FooterBottom";
 import NavbarTop from "./components/NavbarTop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SeriesDetails from "./components/SeriesDetails";
@@ -28,7 +27,7 @@ function App() {
             <Account />
           </ProtectedRoute>} />
         </Routes>
-        <FooterBottom/>
+
       </AuthContextProvider>
     </>
   );

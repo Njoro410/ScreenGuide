@@ -10,7 +10,7 @@ import {
 
 const FooterBottom = () => {
   return (
-    <Footer className="flex flex-col bg-black relative">
+    <Footer className="flex flex-col bg-transparent/100 relative">
       <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
         <Footer.LinkGroup className="mt-3 flex-wrap items-center text-sm sm:mt-0">
           <Footer.Link href="#">About</Footer.Link>

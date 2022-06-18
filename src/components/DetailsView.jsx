@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Cast from "./Cast";
 import Modal from "./Modal";
-import { FaHeart, FaRegHeart, FaEye, FaCheck } from "react-icons/fa";
+import { FaHeart, FaCheck } from "react-icons/fa";
 import ReactTooltip from "react-tooltip";
 import { UserAuth } from "../context/AuthContext";
 import { db } from "../Firebase";

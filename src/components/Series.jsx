@@ -3,7 +3,7 @@ import requests from "../Requests";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import SeriesModal from "./SeriesModal";
-import ReactTooltip from "react-tooltip";
+
 
 const Series = () => {
   const [show, setSeries] = useState({});
