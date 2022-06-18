@@ -31,7 +31,7 @@ const DetailsView = () => {
           img: details.backdrop_path,
         }),
       });
-      await Toast.fire({
+       Toast.fire({
         icon: "success",
         title: details?.title,
         text: "Marked as favourite"
@@ -56,7 +56,7 @@ const DetailsView = () => {
           img: details.backdrop_path,
         }),
       });
-      await Toast.fire({
+       Toast.fire({
         icon: "success",
         title: details?.title,
         text: "set as watched"
