@@ -13,12 +13,12 @@ const Toast = Swal.mixin({
     position: "top-right",
     iconColor: "red",
     customClass: {
-      popup: "colored-toast",
+        popup: "colored-toast",
     },
     showConfirmButton: false,
     timer: 5000,
     timerProgressBar: true,
-  });
+});
 
 
 export function AuthContextProvider({ children }) {
@@ -47,7 +47,14 @@ export function AuthContextProvider({ children }) {
                     icon: "error",
                     title: "Failed",
                     text: "Please try another method"
-                  });
+                });
+                const errorCode = error.code;
+                console.log(errorCode);
+                const errorMessage = error.message;
+                console.log(errorMessage);
+                const email = error.customData.email;
+                console.log(email);
+                const credential = FacebookAuthProvider.credentialFromError(error);
             });
     }
 
@@ -70,7 +77,7 @@ export function AuthContextProvider({ children }) {
                     icon: "error",
                     title: "Failed",
                     text: "Please try another method"
-                  });
+                });
             });
     }
 
@@ -105,7 +112,7 @@ export function AuthContextProvider({ children }) {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
-           
+
 
         })
         return () => {
@@ -116,7 +123,7 @@ export function AuthContextProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ facebookSignIn ,googleSignIn, signUp, logIn, logOut, user }}>
+        <AuthContext.Provider value={{ facebookSignIn, googleSignIn, signUp, logIn, logOut, user }}>
             {children}
         </AuthContext.Provider>
     )

@@ -9,6 +9,7 @@ import { UserAuth } from "../context/AuthContext";
 import { db } from "../Firebase";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
+import Color, { Palette } from "color-thief-react";
 
 const DetailsView = () => {
   const { id } = useParams();
@@ -31,10 +32,10 @@ const DetailsView = () => {
           img: details.backdrop_path,
         }),
       });
-       Toast.fire({
+      Toast.fire({
         icon: "success",
         title: details?.title,
-        text: "Marked as favourite"
+        text: "Marked as favourite",
       });
     } else {
       Swal.fire({
@@ -56,10 +57,10 @@ const DetailsView = () => {
           img: details.backdrop_path,
         }),
       });
-       Toast.fire({
+      Toast.fire({
         icon: "success",
         title: details?.title,
-        text: "set as watched"
+        text: "set as watched",
       });
     } else {
       Swal.fire({
@@ -105,8 +106,26 @@ const DetailsView = () => {
     return Math.floor(p);
   };
 
+  const Loading = () => <div>Loading...</div>;
+  
+  const imgSrc =
+  `https://image.tmdb.org/t/p/original/${details?.backdrop_path}`
+
   return (
     <div className="md:w-full h-[650px] text-white">
+      <Color src={imgSrc} crossOrigin="anonymous" format="hex">
+        {({ data, loading }) => {
+          if (loading) return <Loading />;
+          console.log(data)
+          return (
+            <div>
+              {/* Predominant color: <strong>{data}</strong> */}
+              
+            </div>
+          );
+        }}
+      </Color>
+
       <div className="w-full h-full">
         <div className="bg-black/90 fixed top-0 left-0 w-full h-screen"></div>
         <img
@@ -153,7 +172,9 @@ const DetailsView = () => {
                 ))}
               </div>
               <div>
-                <p className="text-3xl  font-bold my-2 text-green-400">Overview</p>
+                <p className="text-3xl  font-bold my-2 text-green-400">
+                  Overview
+                </p>
                 <p className="">{details?.overview}</p>
               </div>
               {/* <div>
@@ -200,7 +221,8 @@ const DetailsView = () => {
                 </div>
                 <div data-tip="Favourite" className="mt-5">
                   <ReactTooltip type="info" effect="float" />
-                  <button onClick={saveMovie}
+                  <button
+                    onClick={saveMovie}
                     className="font-bold bg-green-900 p-4 rounded-full w-32 flex justify-center  hover:bg-green-700"
                     type="button"
                   >
@@ -208,7 +230,8 @@ const DetailsView = () => {
                   </button>
                 </div>
                 <div data-tip="Watched" className="mt-5">
-                  <button onClick={watchedMovie}
+                  <button
+                    onClick={watchedMovie}
                     className="font-bold bg-green-900 p-4 rounded-full w-32 flex justify-center  hover:bg-green-700"
                     type="button"
                   >

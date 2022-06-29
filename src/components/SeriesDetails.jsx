@@ -116,7 +116,7 @@ const SeriesDetails = () => {
         />
         <div className="absolute w-full top-[10%] p-4 md:p-8">
           <div className="grid md:grid-cols-3  gap-0 ">
-            <div className="flex justify-center md:col-span-1 ">
+            <div className="flex justify-center items-center md:col-span-1 ">
               <img
                 className="h-[80%] rounded"
                 src={`https://image.tmdb.org/t/p/w500/${details?.poster_path}`}
@@ -232,7 +232,10 @@ const SeriesDetails = () => {
             </div>
           </div>
         </div>
+        <div className="hidden md:block">
         {details?.id && <SeriesCast id={details?.id} />}
+
+        </div>
       </div>
     </div>
   );
