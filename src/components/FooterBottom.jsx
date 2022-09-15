@@ -25,12 +25,12 @@ const FooterBottom = () => {
             <ul className="text-green-400 dark:text-gray-400">
               <li className="mb-4">
                 <a href="#" className="hover:text-green-400 text-gray-600">
-                  ScreenGuide
+                  Rent
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-green-400 text-gray-600">
-                  Tailwind CSS
+                  Buy
                 </a>
               </li>
             </ul>
